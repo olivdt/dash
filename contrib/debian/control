@@ -1,8 +1,8 @@
-Source: dash
+Source: newcoin
 Section: utils
 Priority: optional
-Maintainer: Holger Schinzel <holger@dash.org>
-Uploaders: Holger Schinzel <holger@dash.org>
+Maintainer: Holger Schinzel <holger@newcoin.org>
+Uploaders: Holger Schinzel <holger@newcoin.org>
 Build-Depends: debhelper,
  devscripts,
  automake,
@@ -24,45 +24,45 @@ Build-Depends: debhelper,
  libprotobuf-dev, protobuf-compiler,
  python
 Standards-Version: 3.9.2
-Homepage: https://www.dash.org/
-Vcs-Git: git://github.com/dashpay/dash.git
-Vcs-Browser: https://github.com/dashpay/dash
+Homepage: https://www.newcoin.org/
+Vcs-Git: git://github.com/newcoinpay/newcoin.git
+Vcs-Browser: https://github.com/newcoinpay/newcoin
 
-Package: dashd
+Package: newcoind
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: peer-to-peer network based digital currency - daemon
- Dash is an experimental new digital currency that enables anonymous, instant
- payments to anyone, anywhere in the world. Dash uses peer-to-peer
+ NewCoin is an experimental new digital currency that enables anonymous, instant
+ payments to anyone, anywhere in the world. NewCoin uses peer-to-peer
  technology to operate with no central authority: managing transactions
- and issuing money are carried out collectively by the network. Dash Core
+ and issuing money are carried out collectively by the network. NewCoin Core
  is the name of the open source software which enables the use of this currency.
  .
- This package provides the daemon, dashd, and the CLI tool
- dash-cli to interact with the daemon.
+ This package provides the daemon, newcoind, and the CLI tool
+ newcoin-cli to interact with the daemon.
 
-Package: dash-qt
+Package: newcoin-qt
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: peer-to-peer network based digital currency - Qt GUI
- Dash is an experimental new digital currency that enables anonymous, instant
- payments to anyone, anywhere in the world. Dash uses peer-to-peer
+ NewCoin is an experimental new digital currency that enables anonymous, instant
+ payments to anyone, anywhere in the world. NewCoin uses peer-to-peer
  technology to operate with no central authority: managing transactions
- and issuing money are carried out collectively by the network. Dash Core
+ and issuing money are carried out collectively by the network. NewCoin Core
  is the name of the open source software which enables the use of this currency.
  .
- This package provides Dash-Qt, a GUI for Dash based on Qt.
+ This package provides NewCoin-Qt, a GUI for NewCoin based on Qt.
 
-Package: dash-tx
+Package: newcoin-tx
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: peer-to-peer digital currency - standalone transaction tool
- Dash is an experimental new digital currency that enables anonymous, instant
- payments to anyone, anywhere in the world. Dash uses peer-to-peer
+ NewCoin is an experimental new digital currency that enables anonymous, instant
+ payments to anyone, anywhere in the world. NewCoin uses peer-to-peer
  technology to operate with no central authority: managing transactions
- and issuing money are carried out collectively by the network. Dash Core
+ and issuing money are carried out collectively by the network. NewCoin Core
  is the name of the open source software which enables the use of this currency.
  .
- This package provides dash-tx, a command-line transaction creation
- tool which can be used without a dash daemon.  Some means of
+ This package provides newcoin-tx, a command-line transaction creation
+ tool which can be used without a newcoin daemon.  Some means of
  exchanging minimal transaction data with peers is still required.

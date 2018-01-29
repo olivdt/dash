@@ -1,7 +1,7 @@
 [main]
 host = https://www.transifex.com
 
-[dash.qt-translation-012x]
-file_filter = src/qt/locale/dash_<lang>.ts
-source_file = src/qt/locale/dash_en.ts
+[newcoin.qt-translation-012x]
+file_filter = src/qt/locale/newcoin_<lang>.ts
+source_file = src/qt/locale/newcoin_en.ts
 source_lang = en

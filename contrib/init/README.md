@@ -1,11 +1,11 @@
 Sample configuration files for:
 
-SystemD: dashd.service
-Upstart: dashd.conf
-OpenRC:  dashd.openrc
-         dashd.openrcconf
-CentOS:  dashd.init
-OS X:    org.dash.dashd.plist
+SystemD: newcoind.service
+Upstart: newcoind.conf
+OpenRC:  newcoind.openrc
+         newcoind.openrcconf
+CentOS:  newcoind.init
+OS X:    org.newcoin.newcoind.plist
 
 have been made available to assist packagers in creating node packages here.
 
