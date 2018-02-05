@@ -78,12 +78,12 @@ public:
         consensus.nMasternodePaymentsIncreaseBlock = 46000; // TBD
         consensus.nMasternodePaymentsIncreasePeriod = 720 * 30; // TBD
         consensus.nInstantSendKeepLock = 24;
-        consensus.nBudgetPaymentsStartBlock = 328008; // actual historical value
-        consensus.nBudgetPaymentsCycleBlocks = 16616; // ~(60*24*30)/2.6, actual number of blocks per month is 200700 / 12 = 16725
+        consensus.nBudgetPaymentsStartBlock = 32800; // actual historical value
+        consensus.nBudgetPaymentsCycleBlocks = 2000; // ~(60*24*30)/2.6, actual number of blocks per month is 200700 / 12 = 16725
         consensus.nBudgetPaymentsWindowBlocks = 100;
         consensus.nBudgetProposalEstablishingTime = 60*60*24;
         consensus.nSuperblockStartBlock = 614820; // The block at which 12.1 goes live (end of final 12.0 budget cycle)
-        consensus.nSuperblockCycle = 16616; // ~(60*24*30)/2.6, actual number of blocks per month is 200700 / 12 = 16725
+        consensus.nSuperblockCycle = 16616; // ~(60*24*24)/2.6, actual number of blocks per month is 200700 / 12 = 16725
         consensus.nGovernanceMinQuorum = 10;
         consensus.nGovernanceFilterElements = 20000;
         consensus.nMasternodeMinimumConfirmations = 15;
@@ -93,8 +93,8 @@ public:
         consensus.BIP34Height = 1;
         consensus.BIP34Hash = uint256S("0x000007d91d1254d60e2dd1ae580383070a4ddffa4c64c2eeb4a2f9ecc0414343");
         consensus.powLimit = uint256S("00000fffff000000000000000000000000000000000000000000000000000000");
-        consensus.nPowTargetTimespan = 24 * 60 * 60; // NewCoin: 1 day
-        consensus.nPowTargetSpacing = 2.5 * 60; // NewCoin: 2.5 minutes
+        consensus.nPowTargetTimespan = 60; // NewCoin: 1 day
+        consensus.nPowTargetSpacing = 2 * 60; // NewCoin: 2.5 minutes
         consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.fPowNoRetargeting = false;
         consensus.nPowKGWHeight = 15200;
@@ -198,10 +198,15 @@ public:
 
         checkpointData = (CCheckpointData) {
             boost::assign::map_list_of
+<<<<<<< HEAD
             (    0, uint256S("0x00000583d03f4552df7da0d7670bfb05b992c7b57bb3c904a07020d6484c7147"))
             (   2100, uint256S("0x0000000016169afb092aa536662c6c2f808b7b1eefe13842d2039cddd5633969"))
             (  19000, uint256S("0x0000000000534e943f2e311b0a3d3793ba15e865dd4b84d5d7325622796d6aac")),
             1517211381, // * UNIX timestamp of last checkpoint block
+=======
+            (    0, uint256S("0x00000583d03f4552df7da0d7670bfb05b992c7b57bb3c904a07020d6484c7147")),
+            1507424630, // * UNIX timestamp of last checkpoint block
+>>>>>>> fdf484656f0cfe13a385c43e38853a8be44fff14
             3701128,    // * total number of transactions between genesis and last checkpoint
                         //   (the tx=... number in the SetBestChain debug.log lines)
             5000        // * estimated number of transactions per day after checkpoint
