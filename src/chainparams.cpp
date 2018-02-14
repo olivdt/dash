@@ -93,7 +93,7 @@ public:
         consensus.BIP34Height = 1;
         consensus.BIP34Hash = uint256S("0x000007d91d1254d60e2dd1ae580383070a4ddffa4c64c2eeb4a2f9ecc0414343");
         consensus.powLimit = uint256S("00000fffff000000000000000000000000000000000000000000000000000000");
-        consensus.nPowTargetTimespan = 60; // NewCoin: 1 day
+        consensus.nPowTargetTimespan = 60 * 60 * 24; // NewCoin: 1 day
         consensus.nPowTargetSpacing = 2 * 60; // NewCoin: 2.5 minutes
         consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.fPowNoRetargeting = false;
@@ -118,10 +118,10 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0001].nThreshold = 3226; // 80% of 4032
 
         // The best chain should have at least this much work.
-        consensus.nMinimumChainWork = uint256S("0x000000000000000000000000000000000000000000000100a308553b4863b755"); // 782700
+        consensus.nMinimumChainWork = uint256S("0x0000000000000000000000000000000000000000000000000000000000000005"); // 782700
 
         // By default assume that the signatures in ancestors of this block are valid.
-        consensus.defaultAssumeValid = uint256S("0x000000000000001c172f518793c3b9e83f202284615592f87fe3506ce964dcd4"); // 782700
+        consensus.defaultAssumeValid = uint256S("0x0000000000000000000000000000000000000000000000000000000000000004"); // 782700
 
         /**
          * The message start string is designed to be unlikely to occur in normal data.
@@ -134,8 +134,8 @@ public:
         pchMessageStart[3] = 0x0d;
         vAlertPubKey = ParseHex("0483dddb81aedc9b1d8bacdff17d2217ad843b402ee8c6eea634e8a865ea79e8b2c71f23114268e5024d8be7c2291773a852f926eb5c79f44c197fafd1ee1853eb");
         nDefaultPort = 19284;
-        nMaxTipAge = 6 * 60 * 60; // ~144 blocks behind -> 2 x fork detection time, was 24 * 60 * 60 in bitcoin
-        nDelayGetHeadersTime = 24 * 60 * 60;
+        nMaxTipAge = 0x7fffffff; // ~144 blocks behind -> 2 x fork detection time, was 24 * 60 * 60 in bitcoin
+        nDelayGetHeadersTime = 0x7fffffff;
         nPruneAfterHeight = 100000;
 
         genesis = CreateGenesisBlock(1517211381, 1433998, 0x1e0ffff0, 1, 50 * COIN);
@@ -199,10 +199,10 @@ public:
         checkpointData = (CCheckpointData) {
             boost::assign::map_list_of
             (    0, uint256S("0x00000583d03f4552df7da0d7670bfb05b992c7b57bb3c904a07020d6484c7147")),
-            1517211381, // * UNIX timestamp of last checkpoint block
-            3701128,    // * total number of transactions between genesis and last checkpoint
+            1518616385, // * UNIX timestamp of last checkpoint block
+            1,    // * total number of transactions between genesis and last checkpoint
                         //   (the tx=... number in the SetBestChain debug.log lines)
-            5000        // * estimated number of transactions per day after checkpoint
+            0        // * estimated number of transactions per day after checkpoint
         };
     }
 };
@@ -272,7 +272,7 @@ public:
         vAlertPubKey = ParseHex("04517d8a699cb43d3938d7b24faaff7cda448ca4ea267723ba614784de661949bf632d6304316b244646dea079735b9a6fc4af804efb4752075b9fe2245e14e412");
         nDefaultPort = 19999;
         nMaxTipAge = 0x7fffffff; // allow mining on top of old blocks for testnet
-        nDelayGetHeadersTime = 24 * 60 * 60;
+        nDelayGetHeadersTime = 0x7fffffff;
         nPruneAfterHeight = 1000;
 
         // genesis = CreateGenesisBlock(1390666206UL, 3861367235UL, 0x1e0ffff0, 1, 50 * COIN);
@@ -386,7 +386,7 @@ public:
         pchMessageStart[1] = 0x0b;
         pchMessageStart[2] = 0x0c;
         pchMessageStart[3] = 0x0d;
-        nMaxTipAge = 6 * 60 * 60; // ~144 blocks behind -> 2 x fork detection time, was 24 * 60 * 60 in bitcoin
+        nMaxTipAge = 0x7fffffff; // ~144 blocks behind -> 2 x fork detection time, was 24 * 60 * 60 in bitcoin
         nDelayGetHeadersTime = 0; // never delay GETHEADERS in regtests
         nDefaultPort = 19994;
         nPruneAfterHeight = 1000;
