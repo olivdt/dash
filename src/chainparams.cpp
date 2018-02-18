@@ -18,6 +18,11 @@
 
 #include "chainparamsseeds.h"
 
+static const int BLOCKS_PER_HOUR = 24;
+static const int BLOCKS_PER_DAY = BLOCKS_PER_HOUR * 24;
+static const int BLOCKS_PER_MONTH = BLOCKS_PER_DAY * 30;
+
+
 static CBlock CreateGenesisBlock(const char* pszTimestamp, const CScript& genesisOutputScript, uint32_t nTime, uint32_t nNonce, uint32_t nBits, int32_t nVersion, const CAmount& genesisReward)
 {
     CMutableTransaction txNew;
@@ -52,8 +57,8 @@ static CBlock CreateGenesisBlock(const char* pszTimestamp, const CScript& genesi
  */
 static CBlock CreateGenesisBlock(uint32_t nTime, uint32_t nNonce, uint32_t nBits, int32_t nVersion, const CAmount& genesisReward)
 {
-    const char* pszTimestamp = "Wired 09/Jan/2014 The Grand Experiment Goes Live: Overstock.com Is Now Accepting Bitcoins";
-    const CScript genesisOutputScript = CScript() << ParseHex("0487e5574e9c9b9b1bc2756f1e12bd0262db59fb05d71bc0782cd0313887d4b5d3b08ce4bd40d2329236a0749b398026b05dde8432a504a1dafe340dba6e8b5d9f") << OP_CHECKSIG;
+    const char* pszTimestamp = "Testing 123";
+    const CScript genesisOutputScript = CScript() << ParseHex("04678afdb0fe5548271967f1a67130b7105cd6a828e03909a67962e0ea1f61deb649f6bc3f4cef38c4f35504e51ec112de5c384df7ba0b8d578a4c702b6bf11d5f") << OP_CHECKSIG;
     return CreateGenesisBlock(pszTimestamp, genesisOutputScript, nTime, nNonce, nBits, nVersion, genesisReward);
 }
 
@@ -73,28 +78,28 @@ class CMainParams : public CChainParams {
 public:
     CMainParams() {
         strNetworkID = "main";
-        consensus.nSubsidyHalvingInterval = 262800; // Block every 2 mins (30*24*365)
-        consensus.nMasternodePaymentsStartBlock = 10000; // not true, but it's ok as long as it's less then nMasternodePaymentsIncreaseBlock
-        consensus.nMasternodePaymentsIncreaseBlock = 46000; // TBD
-        consensus.nMasternodePaymentsIncreasePeriod = 720 * 30; // TBD
+        consensus.nSubsidyHalvingInterval = BLOCKS_PER_DAY * 2;
+        consensus.nMasternodePaymentsStartBlock = BLOCKS_PER_DAY / 4;
+        consensus.nMasternodePaymentsIncreaseBlock = BLOCKS_PER_DAY / 3;
+        consensus.nMasternodePaymentsIncreasePeriod = BLOCKS_PER_DAY / 2;
         consensus.nInstantSendKeepLock = 24;
-        consensus.nBudgetPaymentsStartBlock = 32800; // actual historical value
-        consensus.nBudgetPaymentsCycleBlocks = 2000; // ~(60*24*30)/2.6, actual number of blocks per month is 200700 / 12 = 16725
+        consensus.nBudgetPaymentsStartBlock = BLOCKS_PER_DAY * 1;
+        consensus.nBudgetPaymentsCycleBlocks = BLOCKS_PER_DAY / 5;
         consensus.nBudgetPaymentsWindowBlocks = 100;
-        consensus.nBudgetProposalEstablishingTime = 60*60*24;
-        consensus.nSuperblockStartBlock = 614820; // The block at which 12.1 goes live (end of final 12.0 budget cycle)
-        consensus.nSuperblockCycle = 16616; // ~(60*24*24)/2.6, actual number of blocks per month is 200700 / 12 = 16725
-        consensus.nGovernanceMinQuorum = 10;
+        consensus.nBudgetProposalEstablishingTime = BLOCKS_PER_DAY / 5;
+        consensus.nSuperblockStartBlock = BLOCKS_PER_DAY * 1;
+        consensus.nSuperblockCycle = BLOCKS_PER_DAY / 5;
+        consensus.nGovernanceMinQuorum = 1;
         consensus.nGovernanceFilterElements = 20000;
-        consensus.nMasternodeMinimumConfirmations = 15;
+        consensus.nMasternodeMinimumConfirmations = 3;
         consensus.nMajorityEnforceBlockUpgrade = 750;
         consensus.nMajorityRejectBlockOutdated = 950;
         consensus.nMajorityWindow = 1000;
         consensus.BIP34Height = 1;
         consensus.BIP34Hash = uint256S("0x000007d91d1254d60e2dd1ae580383070a4ddffa4c64c2eeb4a2f9ecc0414343");
         consensus.powLimit = uint256S("00000fffff000000000000000000000000000000000000000000000000000000");
-        consensus.nPowTargetTimespan = 60 * 60 * 24; // NewCoin: 1 day
-        consensus.nPowTargetSpacing = 2 * 60; // NewCoin: 2.5 minutes
+        consensus.nPowTargetTimespan = BLOCKS_PER_HOUR * 60;
+        consensus.nPowTargetSpacing = BLOCKS_PER_HOUR;
         consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.fPowNoRetargeting = false;
         consensus.nPowKGWHeight = 15200;
@@ -138,7 +143,7 @@ public:
         nDelayGetHeadersTime = 0x7fffffff;
         nPruneAfterHeight = 100000;
 
-        genesis = CreateGenesisBlock(1517211381, 1433998, 0x1e0ffff0, 1, 50 * COIN);
+        genesis = CreateGenesisBlock(1518965381, 2430270, 0x1e0ffff0, 1, 50 * COIN);
 
 /*       consensus.hashGenesisBlock = uint256S("0x01");
         if (true && genesis.GetHash() != consensus.hashGenesisBlock)
@@ -159,8 +164,8 @@ public:
         }
 */
         consensus.hashGenesisBlock = genesis.GetHash();
-        assert(consensus.hashGenesisBlock == uint256S("0x00000583d03f4552df7da0d7670bfb05b992c7b57bb3c904a07020d6484c7147"));
-        assert(genesis.hashMerkleRoot == uint256S("0xd64514eb58f91313f74577f4410340f496a37ad7eb42a14e8cebc1244377300f"));
+        assert(consensus.hashGenesisBlock == uint256S("0x000003480ef4540f2494c059a77f0f59d1e819d800afcb9b8b9739034772f06a"));
+        assert(genesis.hashMerkleRoot == uint256S("0x1feaeb14da470c912f4ef06679ee4772a96b450ccd1e74410faac0f9511387fc"));
 
 /*
         vSeeds.push_back(CDNSSeedData("newcoin.org", "dnsseed.newcoin.org"));
@@ -186,7 +191,7 @@ public:
 
         vFixedSeeds = std::vector<SeedSpec6>(pnSeed6_main, pnSeed6_main + ARRAYLEN(pnSeed6_main));
 
-        fMiningRequiresPeers = true;
+        fMiningRequiresPeers = false;
         fDefaultConsistencyChecks = false;
         fRequireStandard = true;
         fMineBlocksOnDemand = false;
@@ -198,9 +203,9 @@ public:
 
         checkpointData = (CCheckpointData) {
             boost::assign::map_list_of
-            (    0, uint256S("0x00000583d03f4552df7da0d7670bfb05b992c7b57bb3c904a07020d6484c7147")),
-            1518616385, // * UNIX timestamp of last checkpoint block
-            1,    // * total number of transactions between genesis and last checkpoint
+            (    0, uint256S("000003480ef4540f2494c059a77f0f59d1e819d800afcb9b8b9739034772f06a")),
+            1518965381, // * UNIX timestamp of last checkpoint block
+            0,    // * total number of transactions between genesis and last checkpoint
                         //   (the tx=... number in the SetBestChain debug.log lines)
             0        // * estimated number of transactions per day after checkpoint
         };
@@ -276,11 +281,11 @@ public:
         nPruneAfterHeight = 1000;
 
         // genesis = CreateGenesisBlock(1390666206UL, 3861367235UL, 0x1e0ffff0, 1, 50 * COIN);
-        genesis = CreateGenesisBlock(1517211381, 1433998, 0x1e0ffff0, 1, 50 * COIN);
+        genesis = CreateGenesisBlock(1518965381, 2430270, 0x1e0ffff0, 1, 50 * COIN);
 
         consensus.hashGenesisBlock = genesis.GetHash();
-        assert(consensus.hashGenesisBlock == uint256S("0x00000583d03f4552df7da0d7670bfb05b992c7b57bb3c904a07020d6484c7147"));
-        assert(genesis.hashMerkleRoot == uint256S("0xd64514eb58f91313f74577f4410340f496a37ad7eb42a14e8cebc1244377300f"));
+        assert(consensus.hashGenesisBlock == uint256S("0x000003480ef4540f2494c059a77f0f59d1e819d800afcb9b8b9739034772f06a"));
+        assert(genesis.hashMerkleRoot == uint256S("0x1feaeb14da470c912f4ef06679ee4772a96b450ccd1e74410faac0f9511387fc"));
 
         vFixedSeeds.clear();
         vSeeds.clear();
@@ -392,12 +397,12 @@ public:
         nPruneAfterHeight = 1000;
 
 //        genesis = CreateGenesisBlock(1417713337, 1096447, 0x207fffff, 1, 50 * COIN);
-        genesis = CreateGenesisBlock(1517211381, 1433998, 0x1e0ffff0, 1, 50 * COIN);
+        genesis = CreateGenesisBlock(1518965381, 2430270, 0x1e0ffff0, 1, 50 * COIN);
 
         consensus.hashGenesisBlock = genesis.GetHash();
 
-        assert(consensus.hashGenesisBlock == uint256S("0x00000583d03f4552df7da0d7670bfb05b992c7b57bb3c904a07020d6484c7147"));
-        assert(genesis.hashMerkleRoot == uint256S("0xd64514eb58f91313f74577f4410340f496a37ad7eb42a14e8cebc1244377300f"));
+        assert(consensus.hashGenesisBlock == uint256S("0x000003480ef4540f2494c059a77f0f59d1e819d800afcb9b8b9739034772f06a"));
+        assert(genesis.hashMerkleRoot == uint256S("0x1feaeb14da470c912f4ef06679ee4772a96b450ccd1e74410faac0f9511387fc"));
 
 
         vFixedSeeds.clear(); //! Regtest mode doesn't have any fixed seeds.

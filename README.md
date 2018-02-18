@@ -1,3 +1,14 @@
+# Params
+Block generation time: 2.5 mins
+Blocks per hour: 24
+Blocks per day: 576
+MN collateral: 15000
+Rewards at start: POW: 50% POW: 50%
+Coins per block: 200 
+
+
+
+
 NewCoin Core staging tree 0.12.2
 ===============================
 
