@@ -20,8 +20,7 @@
 #include <boost/lexical_cast.hpp>
 
 
-const int MASTERNODE_COLLATERAL_AMT = 1500;
-
+static const int MASTERNODE_COLLATERAL_AMT = 1500;
 CMasternode::CMasternode() :
     masternode_info_t{ MASTERNODE_ENABLED, PROTOCOL_VERSION, GetAdjustedTime()},
     fAllowMixingTx(true)
