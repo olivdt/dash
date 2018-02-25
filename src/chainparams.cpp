@@ -21,6 +21,8 @@
 static const int BLOCKS_PER_HOUR = 24;
 static const int BLOCKS_PER_DAY = BLOCKS_PER_HOUR * 24;
 static const int BLOCKS_PER_MONTH = BLOCKS_PER_DAY * 30;
+static const int HOUR = 60*60;
+static const int DAY = 24 * HOUR;
 
 
 static CBlock CreateGenesisBlock(const char* pszTimestamp, const CScript& genesisOutputScript, uint32_t nTime, uint32_t nNonce, uint32_t nBits, int32_t nVersion, const CAmount& genesisReward)
@@ -78,37 +80,37 @@ class CMainParams : public CChainParams {
 public:
     CMainParams() {
         strNetworkID = "main";
-        consensus.nSubsidyHalvingInterval = BLOCKS_PER_DAY * 2;
-        consensus.nMasternodePaymentsStartBlock = BLOCKS_PER_DAY / 4;
-        consensus.nMasternodePaymentsIncreaseBlock = BLOCKS_PER_DAY / 3;
-        consensus.nMasternodePaymentsIncreasePeriod = BLOCKS_PER_DAY / 2;
+        consensus.nSubsidyHalvingInterval = BLOCKS_PER_MONTH * 6;
+        consensus.nMasternodePaymentsStartBlock = 10;
+        consensus.nMasternodePaymentsIncreaseBlock = 3000;
+        consensus.nMasternodePaymentsIncreasePeriod = 7000;
         consensus.nInstantSendKeepLock = 24;
-        consensus.nBudgetPaymentsStartBlock = BLOCKS_PER_DAY * 1;
-        consensus.nBudgetPaymentsCycleBlocks = BLOCKS_PER_DAY / 5;
+        consensus.nBudgetPaymentsStartBlock = BLOCKS_PER_MONTH;
+        consensus.nBudgetPaymentsCycleBlocks = BLOCKS_PER_MONTH / 2;
         consensus.nBudgetPaymentsWindowBlocks = 100;
-        consensus.nBudgetProposalEstablishingTime = BLOCKS_PER_DAY / 5;
-        consensus.nSuperblockStartBlock = BLOCKS_PER_DAY * 1;
-        consensus.nSuperblockCycle = BLOCKS_PER_DAY / 5;
+        consensus.nBudgetProposalEstablishingTime = DAY * 1;
+        consensus.nSuperblockStartBlock = BLOCKS_PER_MONTH;
+        consensus.nSuperblockCycle = BLOCKS_PER_MONTH / 2;
         consensus.nGovernanceMinQuorum = 1;
         consensus.nGovernanceFilterElements = 20000;
-        consensus.nMasternodeMinimumConfirmations = 3;
+        consensus.nMasternodeMinimumConfirmations = 15;
         consensus.nMajorityEnforceBlockUpgrade = 750;
         consensus.nMajorityRejectBlockOutdated = 950;
         consensus.nMajorityWindow = 1000;
         consensus.BIP34Height = 1;
         consensus.BIP34Hash = uint256S("0x000007d91d1254d60e2dd1ae580383070a4ddffa4c64c2eeb4a2f9ecc0414343");
         consensus.powLimit = uint256S("00000fffff000000000000000000000000000000000000000000000000000000");
-        consensus.nPowTargetTimespan = BLOCKS_PER_HOUR * 60;
-        consensus.nPowTargetSpacing = BLOCKS_PER_HOUR;
+        consensus.nPowTargetTimespan = DAY;
+        consensus.nPowTargetSpacing = 2.5 * 60;
         consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.fPowNoRetargeting = false;
         consensus.nPowKGWHeight = 15200;
         consensus.nPowDGWHeight = 34140;
         consensus.nRuleChangeActivationThreshold = 1916; // 95% of 2016
-        consensus.nMinerConfirmationWindow = 2016; // nPowTargetTimespan / nPowTargetSpacing
+        consensus.nMinerConfirmationWindow = BLOCKS_PER_HOUR;
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = 28;
-        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = 1199145601; // January 1, 2008
-        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nTimeout = 1230767999; // December 31, 2008
+        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = 1199145601;
+        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nTimeout = 1230767999;
 
         // Deployment of BIP68, BIP112, and BIP113.
         consensus.vDeployments[Consensus::DEPLOYMENT_CSV].bit = 0;
@@ -139,66 +141,35 @@ public:
         pchMessageStart[3] = 0x0d;
         vAlertPubKey = ParseHex("0483dddb81aedc9b1d8bacdff17d2217ad843b402ee8c6eea634e8a865ea79e8b2c71f23114268e5024d8be7c2291773a852f926eb5c79f44c197fafd1ee1853eb");
         nDefaultPort = 19284;
-        nMaxTipAge = 0x7fffffff; // ~144 blocks behind -> 2 x fork detection time, was 24 * 60 * 60 in bitcoin
-        nDelayGetHeadersTime = 0x7fffffff;
+        nMaxTipAge = HOUR * 6;
+        nDelayGetHeadersTime = DAY * 1;
         nPruneAfterHeight = 100000;
 
         genesis = CreateGenesisBlock(1518965381, 2430270, 0x1e0ffff0, 1, 50 * COIN);
 
-/*       consensus.hashGenesisBlock = uint256S("0x01");
-        if (true && genesis.GetHash() != consensus.hashGenesisBlock)
-        {
-            uint256 genhash = genesis.GetHash();
-            LogPrintf("Old genesis nonce: %s\n", genesis.nNonce);
-            LogPrintf("Old genesis hash:  %s\n", consensus.hashGenesisBlock.ToString().c_str());
-            // deliberately empty for loop finds nonce value.
-            for(genesis.nNonce = 1433990; UintToArith256(consensus.powLimit) < UintToArith256(genhash);){ 
-		genhash = genesis.GetHash();
-//		printf("%i %x %x\n", genesis.nNonce, genhash, consensus.powLimit); 
-                printf("%i %s %s\n", genesis.nNonce, genhash.ToString().c_str(), consensus.powLimit.ToString().c_str());
-                genesis.nNonce++;
-            }
-            printf("New genesis nonce: %u\n", --genesis.nNonce);
-            printf("New genesis Merkle root: %s\n", genesis.hashMerkleRoot.ToString().c_str());
-            printf("New genesis hash: %s\n", genesis.GetHash().ToString().c_str());
-        }
-*/
         consensus.hashGenesisBlock = genesis.GetHash();
         assert(consensus.hashGenesisBlock == uint256S("0x000003480ef4540f2494c059a77f0f59d1e819d800afcb9b8b9739034772f06a"));
         assert(genesis.hashMerkleRoot == uint256S("0x1feaeb14da470c912f4ef06679ee4772a96b450ccd1e74410faac0f9511387fc"));
 
-/*
-        vSeeds.push_back(CDNSSeedData("newcoin.org", "dnsseed.newcoin.org"));
-        vSeeds.push_back(CDNSSeedData("newcoindot.io", "dnsseed.newcoindot.io"));
-        vSeeds.push_back(CDNSSeedData("masternode.io", "dnsseed.masternode.io"));
-        vSeeds.push_back(CDNSSeedData("newcoinpay.io", "dnsseed.newcoinpay.io"));
-*/
-        vFixedSeeds.clear();
-        vSeeds.clear();
-        // NewCoin addresses start with 'X'
-        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,26);
-        // NewCoin script addresses start with '7'
-        base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,36);
-        // NewCoin private keys start with '7' or 'X'
-        base58Prefixes[SECRET_KEY] =     std::vector<unsigned char>(1,214);
-        // NewCoin BIP32 pubkeys start with 'xpub' (Bitcoin defaults)
-        base58Prefixes[EXT_PUBLIC_KEY] = boost::assign::list_of(0x01)(0x88)(0xB2)(0x1E).convert_to_container<std::vector<unsigned char> >();
-        // NewCoin BIP32 prvkeys start with 'xprv' (Bitcoin defaults)
-        base58Prefixes[EXT_SECRET_KEY] = boost::assign::list_of(0x02)(0x88)(0xAD)(0xE4).convert_to_container<std::vector<unsigned char> >();
+        vSeeds.push_back(CDNSSeedData("45.77.200.212", "45.77.200.212"));
 
-        // NewCoin BIP44 coin type is '5'
+        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,26);
+        base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,36);
+        base58Prefixes[SECRET_KEY] =     std::vector<unsigned char>(1,214);
+        base58Prefixes[EXT_PUBLIC_KEY] = boost::assign::list_of(0x01)(0x88)(0xB2)(0x1E).convert_to_container<std::vector<unsigned char> >();
+        base58Prefixes[EXT_SECRET_KEY] = boost::assign::list_of(0x02)(0x88)(0xAD)(0xE4).convert_to_container<std::vector<unsigned char> >();
         nExtCoinType = 5;
 
         vFixedSeeds = std::vector<SeedSpec6>(pnSeed6_main, pnSeed6_main + ARRAYLEN(pnSeed6_main));
 
-        fMiningRequiresPeers = false;
+        fMiningRequiresPeers = true;
         fDefaultConsistencyChecks = false;
         fRequireStandard = true;
         fMineBlocksOnDemand = false;
         fTestnetToBeDeprecatedFieldRPC = false;
 
         nPoolMaxTransactions = 3;
-        nFulfilledRequestExpireTime = 60*60; // fulfilled requests expire in 1 hour
+        nFulfilledRequestExpireTime = HOUR * 1;
         strSporkPubKey = "04549ac134f694c0243f503e8c8a9a986f5de6610049c40b07816809b0d1d06a21b07be27b9bb555931773f62ba6cf35a25fd52f694d4e1106ccd237a7bb899fdd";
 
         checkpointData = (CCheckpointData) {

@@ -20,6 +20,8 @@
 #include <boost/lexical_cast.hpp>
 
 
+const int MASTERNODE_COLLATERAL_AMT = 1500;
+
 CMasternode::CMasternode() :
     masternode_info_t{ MASTERNODE_ENABLED, PROTOCOL_VERSION, GetAdjustedTime()},
     fAllowMixingTx(true)
@@ -116,7 +118,7 @@ CMasternode::CollateralStatus CMasternode::CheckCollateral(const COutPoint& outp
         return COLLATERAL_UTXO_NOT_FOUND;
     }
 
-    if(coin.out.nValue != 1000 * COIN) {
+    if(coin.out.nValue != MASTERNODE_COLLATERAL_AMT * COIN) {
         return COLLATERAL_INVALID_AMOUNT;
     }
 

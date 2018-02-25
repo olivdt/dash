@@ -1231,18 +1231,16 @@ NOTE:   unlike bitcoin we are using PREVIOUS block height here,
 CAmount GetBlockSubsidy(int nPrevBits, int nPrevHeight, const Consensus::Params& consensusParams, bool fSuperblockPartOnly)
 {
     double dDiff;
-    CAmount nSubsidyBase = 200;
+    CAmount nSubsidyBase = 18;
 
-  if(nPrevHeight <= 10) {nSubsidyBase = 94500;}
+  if(nPrevHeight <= 10) {nSubsidyBase = 42000;}
 
-    LogPrintf("height %u diff %4.2f reward %d\n", nPrevHeight, dDiff, nSubsidyBase);
     CAmount nSubsidy = nSubsidyBase * COIN;
 
     for (int i = consensusParams.nSubsidyHalvingInterval; i <= nPrevHeight; i += consensusParams.nSubsidyHalvingInterval) {
-        nSubsidy -= nSubsidy/2;
+        nSubsidy -= nSubsidy*0.30;
     }
 
-    // Hard fork to reduce the block reward by 10 extra percent (allowing budget/superblocks)
     CAmount nSuperblockPart = (nPrevHeight > consensusParams.nBudgetPaymentsStartBlock) ? nSubsidy/10 : 0;
 
     return fSuperblockPartOnly ? nSuperblockPart : nSubsidy - nSuperblockPart;
@@ -1250,15 +1248,14 @@ CAmount GetBlockSubsidy(int nPrevBits, int nPrevHeight, const Consensus::Params&
 
 CAmount GetMasternodePayment(int nHeight, CAmount blockValue)
 {
-    CAmount ret = blockValue/2; // start at 50%
+    CAmount ret = blockValue*0.30; // 30% to start
 
     int nMNPIBlock = Params().GetConsensus().nMasternodePaymentsIncreaseBlock;
     int nMNPIPeriod = Params().GetConsensus().nMasternodePaymentsIncreasePeriod;
-                                                                      // mainnet:
-    if(nHeight > nMNPIBlock)                  ret += blockValue / 4; // 75% total
-    if(nHeight > nMNPIBlock+(nMNPIPeriod* 1)) ret += blockValue / 20; // 80% total
-    if(nHeight > nMNPIBlock+(nMNPIPeriod* 2)) ret += blockValue / 20; // 85% total
-    if(nHeight > nMNPIBlock+(nMNPIPeriod* 3)) ret += blockValue / 20; // 90% total
+
+    if(nHeight > nMNPIBlock)                            ret += blockValue * 0.30; // 60% total 3k
+    if(nHeight > nMNPIBlock+nMNPIPeriod)                ret += blockValue * 0.1; // 70% total at 10k
+    if(nHeight > nMNPIBlock+47000)                      ret += blockValue * 0.1; // 80% total 50k
 
     return ret;
 }
